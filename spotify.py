@@ -2,10 +2,35 @@ from os import system, name
 from pytify.strategy import get_pytify_class_by_platform
 from pytify.dbus.metadata import Metadata
 import time
+import PySimpleGUI as gui
+
+gui.theme('DarkAmber')
 
 spotify = get_pytify_class_by_platform()()
 spotify.metadata = Metadata()
 metadata = spotify.metadata.get_metadata()
+
+song=spotify.metadata.get_current_playing()
+album=metadata['xesam:album']
+songlength=(metadata['mpris:length']/(10**6))/60
+trackid=metadata['mpris:trackid']
+trackurl=metadata['xesam:url']
+
+
+layout = [	[gui.Text(f"Name of the song: {song}.", key='-SONG-')],
+			[gui.Text(f"Album: {album}.", key='-ALBUM-')],
+			[gui.Text(f"Song length: {songlength}.", key='-LENGTH-')],
+			[gui.Text(f"Track id: {trackid}.", key='-TRACKID-')],
+			[gui.Text(f"Track url: {trackurl}.", key='-TRACKURL-')],
+			[gui.Button("Refresh")],
+            [gui.Button("Next song")],
+            [gui.Button("Previous song")],
+			[gui.Button("Exit")]
+		 ]
+
+window = gui.Window('Spotify Helper', layout)
+
+
 
 def clear():
 
@@ -15,72 +40,34 @@ def clear():
 		else:
 			_ = system("clear")
 
+
 while True:
-	print("Please choose an option:\n\n")
-	print("1. Informations about the song that is being played.")
-	print("2. Interact with Spotify app.")
+    event, values = window.read()
+    print(event, values)
+    if event == gui.WIN_CLOSED or event == 'Exit':
+        break
 
 
-	print("\n\n")
-	choice=input()
-	clear()
+    if event == 'Refresh':
+        spotify2 = get_pytify_class_by_platform()
+        spotify2.metadata = Metadata()
+        metadata2 = spotify.metadata.get_metadata()
+        song2 = spotify.metadata.get_current_playing()
+        album2 = metadata2['xesam:album']
+        songlength2 = (metadata2['mpris:length']/(10**6))/60
+        trackid2 = metadata2['mpris:trackid']
+        trackurl2 = metadata2['xesam:url']
 
-	if choice=="1":
-		song=spotify.metadata.get_current_playing()
-		album=metadata['xesam:album']
-		songlength=(metadata['mpris:length']/(10**6))/60
-		trackid=metadata['mpris:trackid']
-		trackurl=metadata['xesam:url']
-
-		print(f"Name of the song:\t\t|	{song}\n")
-		print(f"Album:\t\t\t\t|	{album}\n")
-		print(f"Song length:\t\t\t|	{songlength}\n")
-		print(f"Track id:\t\t\t|	{trackid}\n")
-		print(f"Track url:\t\t\t|	{trackurl}\n")
-
-		while True:
-			time.sleep(10)
-			spotify2=get_pytify_class_by_platform()
-			spotify2.metadata=Metadata()
-			metadata2 = spotify.metadata.get_metadata()
-			song2=spotify.metadata.get_current_playing()
-			album2=metadata2['xesam:album']
-			songlength2=(metadata2['mpris:length']/(10**6))/60
-			trackid2=metadata2['mpris:trackid']
-			trackurl2=metadata2['xesam:url']
-
-			if song!=song2:
-				clear()
-				print(f"Name of the song:\t\t|	{song2}\n")
-				print(f"Album:\t\t\t\t|	{album2}\n")
-				print(f"Song length:\t\t\t|	{songlength2}\n")
-				print(f"Track id:\t\t\t|	{trackid2}\n")
-				print(f"Track url:\t\t\t|	{trackurl2}\n")
-				song=song2;
+        window['-SONG-'].update(f"Name of the song: {song2}.")
+        window['-ALBUM-'].update(f"Album: {album2}.")
+        window['-LENGTH-'].update(f"Song length: {songlength2}.")
+        window['-TRACKID-'].update(f"Track id: {trackid2}.")
+        window['-TRACKURL-'].update(f"Track url: {trackurl2}.")
 
 
-	if choice=="2":
 
+    if event == 'Next song':
+        spotify.next()
 
-		print(f"1. Play/pause the song.")
-		print(f"2. Skip the song.")
-		print(f"3. Play the previous song.")
-
-		interact=input()
-
-		if interact=="1":
-			print("The song is played/paused.")
-			spotify.play_pause()
-
-		elif interact=="2":
-			print(f"Playing now the next song.")
-			spotify.next()
-
-		elif interact=="3":
-			print(f"Playing now the previous song.")
-			spotify.prev()
-
-	print("\n\n")
-	input("Press any key to continue.")
-
-	clear()
+    if event == 'Previous song':
+        spotify.prev()
