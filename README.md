@@ -5,18 +5,18 @@ A tool that makes your life easier.
 ## Requirements
 - Python3;
 - Pytify;
+- PySimpleGUI;
 - Spotify.
 
 
-### Support
+## Changelog
+29 JANUARY 2021:
 
-There's no support
-
-
-Still under development.
+From now, the tool has a GUI and not being anymore CLI.
 
 
-
-
-
-for milka - I did 75% of it without the help of trupples ¯\_(ツ)_/¯
+## To Do
+- Add play/pause button;
+- Add search function;
+- Better design;
+- Automatically refreshing the data without using too much resources.
