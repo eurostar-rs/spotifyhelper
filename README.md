@@ -13,7 +13,7 @@ A tool that makes your life easier.
 29 JANUARY 2021:
 
 From now, the tool has a GUI and not being anymore CLI:
-[screenshot]https://i.imgur.com/UQh5MKN.png
+[screenshot](https://i.imgur.com/UQh5MKN.png)
 
 
 ## To Do
