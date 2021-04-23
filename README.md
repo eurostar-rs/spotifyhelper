@@ -6,6 +6,7 @@ A tool that makes your life easier.
 - Python3;
 - Pytify;
 - PySimpleGUI;
+- dbus-python;
 - Spotify.
 
 
